@@ -16,6 +16,7 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import { MyContext } from "./types";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+import cors from "cors";
 
 dotenv.config();
 
@@ -50,6 +51,12 @@ const main = async () => {
   });
 
   app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
+  app.use(
     session({
       name: "qid",
       store: new RedisStore({
@@ -79,7 +86,11 @@ const main = async () => {
 
   await apolloServer.start();
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false,
+    //false because we are setting global cors instead
+  });
 
   app.listen(4000, () => {
     console.log("Server started on port 4000");
