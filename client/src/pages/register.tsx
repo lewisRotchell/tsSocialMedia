@@ -8,6 +8,8 @@ import { useMutation } from "urql";
 import { toErrorMap } from "../components/utils/toErrorMap";
 import { useRegisterMutation } from "../generated/graphql";
 import { useRouter } from "next/dist/client/router";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../components/utils/createUrqlClient";
 //prefix rh for snippet
 
 interface registerProps {}
@@ -61,4 +63,5 @@ const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default Register;
+//This is for deciding whether to use server side rendering or not
+export default withUrqlClient(createUrqlClient)(Register);

@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 import dotenv from "dotenv";
-import { __prod__ } from "./constants";
+import { COOKIE_NAME, __prod__ } from "./constants";
 import { Post } from "./entities/Post";
 import path from "path";
 import express from "express";
@@ -17,6 +17,7 @@ import connectRedis from "connect-redis";
 import { MyContext } from "./types";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 import cors from "cors";
+import { sendEmail } from "./utils/sendEmail";
 
 dotenv.config();
 
@@ -58,7 +59,7 @@ const main = async () => {
   );
   app.use(
     session({
-      name: "qid",
+      name: COOKIE_NAME,
       store: new RedisStore({
         client: redisClient,
         disableTouch: true,
